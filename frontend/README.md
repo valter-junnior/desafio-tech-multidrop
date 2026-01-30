@@ -1,53 +1,149 @@
-# React + TypeScript + Vite
+# Frontend - Multidrop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend da aplicação Multidrop desenvolvido com React, TypeScript, Tailwind CSS e shadcn/ui.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** - Biblioteca para construção de interfaces
+- **TypeScript** - Superset JavaScript com tipagem estática
+- **Vite** - Build tool e dev server
+- **TailwindCSS** - Framework CSS utility-first
+- **shadcn/ui** - Componentes de UI reutilizáveis
+- **React Router Dom** - Roteamento
+- **TanStack Query** - Gerenciamento de estado assíncrono
+- **Axios** - Cliente HTTP
+- **Zod** - Validação de schemas
+- **React Hook Form** - Gerenciamento de formulários
+- **Zustand** - Gerenciamento de estado global
+- **Lucide React** - Ícones
 
-## React Compiler
+## 📁 Estrutura do Projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── app/
+│   ├── config/         # Configurações (constants, query-client)
+│   ├── data/           # Data layer
+│   ├── routes/         # Configuração de rotas (ProtectedRoute)
+│   └── services/       # Services da API (auth, user, product, sale, report)
+├── features/
+│   ├── auth/           # Feature de autenticação
+│   ├── user/           # Feature de usuários
+│   ├── product/        # Feature de produtos
+│   ├── sale/           # Feature de vendas
+│   └── report/         # Feature de relatórios
+├── layout/             # Layouts principais (MainLayout)
+├── shared/
+│   ├── components/     # Componentes compartilhados
+│   ├── hooks/          # Hooks compartilhados
+│   └── libs/           # Bibliotecas utilitárias
+├── components/ui/      # Componentes UI do shadcn
+└── lib/                # Utilitários (cn, etc)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## ⚙️ Configuração
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
+### Pré-requisitos
+
+- Node.js 24.x
+- npm ou yarn
+
+### Instalação
+
+1. Clone o repositório e navegue até a pasta do frontend:
+
+```bash
+cd frontend
+```
+
+2. Use a versão correta do Node:
+
+```bash
+nvm use 24
+```
+
+3. Instale as dependências:
+
+```bash
+npm install
+```
+
+4. Configure as variáveis de ambiente:
+
+Crie um arquivo `.env` na raiz do projeto frontend:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+## 🏃 Executando
+
+### Modo de Desenvolvimento
+
+```bash
+npm run dev
+```
+
+O aplicativo estará disponível em `http://localhost:5173`
+
+### Build para Produção
+
+```bash
+npm run build
+```
+
+### Preview do Build
+
+```bash
+npm run preview
+```
+
+## 🔐 Autenticação
+
+O sistema usa autenticação JWT. Na página de login, você pode:
+
+1. Inserir um email qualquer
+2. Selecionar um perfil (Admin, Parceiro ou Cliente)
+3. Um token JWT será gerado automaticamente pelo backend
+
+O token e os dados do usuário são armazenados no localStorage.
+
+## 📋 Funcionalidades
+
+### Dashboard
+- Visão geral do sistema
+- Links rápidos para funcionalidades
+
+### Usuários
+- Listar todos os usuários
+- Criar novos usuários
+- Editar usuários existentes
+- Excluir usuários
+- Filtrar por perfil (Admin, Parceiro, Cliente)
+
+### Produtos
+- Listar todos os produtos
+- Criar novos produtos
+- Editar produtos existentes
+- Excluir produtos
+- Definir preço e comissão
+
+### Vendas
+- Listar todas as vendas
+- Criar novas vendas
+- Associar produto, parceiro e cliente
+- Definir quantidade
+
+### Relatórios
+- **Relatório de Vendas**: Visualizar todas as vendas com detalhes
+- **Relatório de Comissões**: Ver comissões por parceiro
+
+## 🔧 Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Cria o build de produção
+- `npm run preview` - Preview do build de produção
+- `npm run lint` - Executa o linter
 import reactDom from 'eslint-plugin-react-dom'
 
 export default defineConfig([

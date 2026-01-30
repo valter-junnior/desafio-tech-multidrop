@@ -1,0 +1,1 @@
+em components.json mude para ir pasra o shared/compoments e shared/libs alem de mover os que ja existe e atualizar os path
