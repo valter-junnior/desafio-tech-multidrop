@@ -1,5 +1,5 @@
-import { ProductEntity } from '../../../core/entities/product.entity';
-import { UserEntity } from '../../../core/entities/user.entity';
+import { ProductEntity } from './product.entity';
+import { UserEntity } from './user.entity';
 
 export class SaleEntity {
   private _id: number;

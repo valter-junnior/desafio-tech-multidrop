@@ -1,20 +1,12 @@
-import { SaleEntity } from '../entities/sale.entity';
+import { SaleEntity } from '../../../../../core/entities/sale.entity';
 import {
   SalePersistenceWithRelations,
   CreateSalePersistence,
-} from '../infrastructure/types/sale-persistence.type';
-import { ProductMapper } from '../../../infrastructure/database/prisma/models/product.mapper';
-import { UserMapper } from '../../../infrastructure/database/prisma/models/user/user.mapper';
+} from './sale-persistence.type';
+import { ProductMapper } from '../product/product.mapper';
+import { UserMapper } from '../user/user.mapper';
 
-/**
- * Mapper para conversão entre camada de domínio e persistência
- * Isola a lógica de transformação e garante que a camada de domínio
- * não dependa diretamente do Prisma
- */
 export class SaleMapper {
-  /**
-   * Converte dados de persistência para entidade de domínio
-   */
   static toDomain(persistence: SalePersistenceWithRelations): SaleEntity {
     return new SaleEntity(
       persistence.id,
@@ -29,9 +21,6 @@ export class SaleMapper {
     );
   }
 
-  /**
-   * Converte entidade de domínio para dados de persistência
-   */
   static toPersistence(entity: SaleEntity): CreateSalePersistence {
     return {
       value: entity.value,
@@ -41,9 +30,6 @@ export class SaleMapper {
     };
   }
 
-  /**
-   * Converte array de dados de persistência para array de entidades de domínio
-   */
   static toDomainArray(persistenceArray: SalePersistenceWithRelations[]): SaleEntity[] {
     return persistenceArray.map((persistence) => this.toDomain(persistence));
   }

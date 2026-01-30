@@ -1,7 +1,7 @@
 import { IsNumber, IsNotEmpty, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateSaleDto {
+export class CreateSaleRequest {
   @ApiProperty({ description: 'ID do produto', example: 1 })
   @IsNumber({}, { message: 'ProductId deve ser um número' })
   @IsNotEmpty({ message: 'ProductId é obrigatório' })

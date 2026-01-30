@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infrastructure/database/prisma/prisma.service';
-import { CreateSaleDto } from '../dto/create-sale.dto';
-import { SaleEntity } from '../entities/sale.entity';
-import { SaleMapper } from '../mappers/sale.mapper';
-import { ISaleRepository } from '../domain/interfaces/sale-repository.interface';
-import { Sale, Product, User } from '../../../infrastructure/database/prisma/generated';
-import { SalePersistenceWithRelations } from './types/sale-persistence.type';
-import { ProductPersistence } from '../../../infrastructure/database/prisma/models/product/product-persistence.type';
-import { UserPersistence } from '../../../infrastructure/database/prisma/models/user/user-persistence.type';
+import { PrismaService } from '../prisma.service';
+import { CreateSaleDto } from '../../../../application/dtos/sale/create-sale.dto';
+import { SaleEntity } from '../../../../core/entities/sale.entity';
+import { ISaleRepository } from '../../../../core/repositories/sale.repository';
+import { Sale, Product, User } from '../prisma';
+import { ProductPersistence } from '../models/product/product-persistence.type';
+import { UserPersistence } from '../models/user/user-persistence.type';
+import { SalePersistenceWithRelations } from '../models/sale/sale-persistence.type';
+import { SaleMapper } from '../models/sale/sale.mapper';
 
 type PrismaSaleWithRelations = Sale & {
   product?: Product;
@@ -15,11 +15,6 @@ type PrismaSaleWithRelations = Sale & {
   partner?: User;
 };
 
-/**
- * Implementação do repositório de vendas usando Prisma
- * Camada de infraestrutura - Implementa a interface da camada de domínio
- * Segue o princípio de Inversão de Dependência (DIP)
- */
 @Injectable()
 export class SaleRepositoryPrisma implements ISaleRepository {
   constructor(private prisma: PrismaService) {}
@@ -102,10 +97,6 @@ export class SaleRepositoryPrisma implements ISaleRepository {
     return this.prisma.sale.count();
   }
 
-  /**
-   * Converte tipos do Prisma para tipos de persistência intermediários
-   * Mantém o Prisma isolado nesta camada de infraestrutura
-   */
   private mapPrismaToPersistence(
     prismaSale: PrismaSaleWithRelations,
   ): SalePersistenceWithRelations {

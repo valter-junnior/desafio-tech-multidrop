@@ -2,10 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '../../../core/enums/user-role.enum';
 import { UserEntity } from '../../../core/entities/user.entity';
 
-/**
- * Presenter para resposta de usuário - Camada de infraestrutura HTTP
- * Usado nos controllers para formatar a resposta
- */
 export class UserPresenter {
   @ApiProperty({ description: 'ID do usuário', example: 1 })
   id: number;

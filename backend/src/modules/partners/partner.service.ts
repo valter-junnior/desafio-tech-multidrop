@@ -3,8 +3,8 @@ import { CommissionResponseDto } from './dto/commission-response.dto';
 import { UserRole } from '../../core/enums/user-role.enum';
 import type { IUserRepository } from '../../core/repositories/user.repository';
 import { USER_REPOSITORY } from '../../core/repositories/user.repository';
-import type { ISaleRepository } from '../sales/domain/interfaces/sale-repository.interface';
-import { SALE_REPOSITORY } from '../sales/domain/interfaces/sale-repository.interface';
+import type { ISaleRepository } from '../../core/repositories/sale.repository';
+import { SALE_REPOSITORY } from '../../core/repositories/sale.repository';
 
 /**
  * Service de parceiros - Camada de aplicação

@@ -1,18 +1,13 @@
 import { Injectable, BadRequestException, NotFoundException, Inject } from '@nestjs/common';
-import { CreateSaleDto } from './dto/create-sale.dto';
-import { SaleResponseDto, SaleDetailResponseDto } from './dto/sale-response.dto';
-import type { ISaleRepository } from './domain/interfaces/sale-repository.interface';
-import { SALE_REPOSITORY } from './domain/interfaces/sale-repository.interface';
+import { CreateSaleDto } from '../dtos/sale/create-sale.dto';
+import { SaleEntity } from '../../core/entities/sale.entity';
+import type { ISaleRepository } from '../../core/repositories/sale.repository';
+import { SALE_REPOSITORY } from '../../core/repositories/sale.repository';
 import type { IUserRepository } from '../../core/repositories/user.repository';
 import { USER_REPOSITORY } from '../../core/repositories/user.repository';
 import type { IProductRepository } from '../../core/repositories/product.repository';
 import { PRODUCT_REPOSITORY } from '../../core/repositories/product.repository';
 
-/**
- * Service de vendas - Camada de aplicação
- * Orquestra as operações usando as interfaces dos repositórios
- * Não depende de implementações concretas (DIP)
- */
 @Injectable()
 export class SaleService {
   constructor(
@@ -24,7 +19,7 @@ export class SaleService {
     private readonly productRepository: IProductRepository,
   ) {}
 
-  async create(createSaleDto: CreateSaleDto): Promise<SaleResponseDto> {
+  async create(createSaleDto: CreateSaleDto): Promise<SaleEntity> {
     // Validar produto usando entity
     const product = await this.productRepository.findById(createSaleDto.productId);
     if (!product) {
@@ -52,12 +47,11 @@ export class SaleService {
       throw new BadRequestException('O partnerId deve ser um usuário com role PARTNER');
     }
 
-    const sale = await this.saleRepository.create(createSaleDto);
-    return new SaleResponseDto(sale);
+    return this.saleRepository.create(createSaleDto);
   }
 
   async findAll(page: number = 1, limit: number = 10): Promise<{
-    data: SaleDetailResponseDto[];
+    data: SaleEntity[];
     total: number;
     page: number;
     limit: number;
@@ -70,7 +64,7 @@ export class SaleService {
     ]);
 
     return {
-      data: sales.map((sale) => new SaleDetailResponseDto(sale)),
+      data: sales,
       total,
       page,
       limit,
@@ -78,11 +72,11 @@ export class SaleService {
     };
   }
 
-  async findById(id: number): Promise<SaleDetailResponseDto> {
+  async findById(id: number): Promise<SaleEntity> {
     const sale = await this.saleRepository.findById(id);
     if (!sale) {
       throw new NotFoundException(`Venda com ID ${id} não encontrada`);
     }
-    return new SaleDetailResponseDto(sale);
+    return sale;
   }
 }

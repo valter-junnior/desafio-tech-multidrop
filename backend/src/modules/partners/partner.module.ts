@@ -1,12 +1,20 @@
 import { Module } from '@nestjs/common';
 import { PartnerController } from './partner.controller';
 import { PartnerService } from './partner.service';
-import { UserModule } from '../users/user.module';
 import { SaleModule } from '../sales/sale.module';
+import { DatabaseModule } from '../../infrastructure/database/database.module';
+import { USER_REPOSITORY } from '../../core/repositories/user.repository';
+import { UserRepositoryPrisma } from '../../infrastructure/database/prisma/repositories/user-repository.prisma';
 
 @Module({
-  imports: [UserModule, SaleModule],
+  imports: [DatabaseModule, SaleModule],
   controllers: [PartnerController],
-  providers: [PartnerService],
+  providers: [
+    PartnerService,
+    {
+      provide: USER_REPOSITORY,
+      useClass: UserRepositoryPrisma,
+    },
+  ],
 })
 export class PartnerModule {}
