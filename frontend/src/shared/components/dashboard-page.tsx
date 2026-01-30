@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useAuthStore } from "../../features/auth/hooks/use-auth-store";
 import { Users, Package, ShoppingCart, TrendingUp } from "lucide-react";
 

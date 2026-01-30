@@ -6,13 +6,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
+} from "../../../shared/components/ui/table";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "../../../components/ui/card";
+} from "../../../shared/components/ui/card";
 
 export function SalesReportPage() {
   const { data: salesReport, isLoading, error } = useSalesReport();

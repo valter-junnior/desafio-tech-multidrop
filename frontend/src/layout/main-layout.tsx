@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../features/auth/hooks/use-auth-store";
-import { Button } from "../components/ui/button";
+import { Button } from "../shared/components/ui/button";
 import {
   LayoutDashboard,
   Users,
