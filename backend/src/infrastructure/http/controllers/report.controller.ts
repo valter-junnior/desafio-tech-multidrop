@@ -1,14 +1,18 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { ReportService } from '../../../application/services/report.service';
 import { SalesReportPresenter } from '../presenters/sales-report.presenter';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRole } from '../../../core/enums/user-role.enum';
 
 @ApiTags('reports')
+@ApiBearerAuth()
 @Controller('reports')
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get('sales')
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Gerar relatório de vendas' })
   @ApiQuery({
     name: 'startDate',
