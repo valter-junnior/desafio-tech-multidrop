@@ -8,7 +8,7 @@ import { UserRole } from '../../../src/core/enums/user-role.enum';
 import { ProductEntity } from '../../../src/core/entities/product.entity';
 import { UserEntity } from '../../../src/core/entities/user.entity';
 import { SaleEntity } from '../../../src/core/entities/sale.entity';
-import { CreateSaleDto } from 'src/application/dtos/sale/create-sale.dto';
+import { CreateSaleDto } from '../../../src/application/dtos/sale/create-sale.dto';
 
 describe('SaleService', () => {
   let service: SaleService;

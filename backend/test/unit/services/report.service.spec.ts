@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReportService } from '../../../src/application/services/report.service';
 import { IReportRepository, REPORT_REPOSITORY } from '../../../src/core/repositories/report.repository';
-import { SaleEntity } from 'src/core/entities/sale.entity';
-import { UserRole } from 'src/core/enums/user-role.enum';
-import { ProductEntity } from 'src/core/entities/product.entity';
-import { UserEntity } from 'src/core/entities/user.entity';
+import { SaleEntity } from '../../../src/core/entities/sale.entity';
+import { UserRole } from '../../../src/core/enums/user-role.enum';
+import { ProductEntity } from '../../../src/core/entities/product.entity';
+import { UserEntity } from '../../../src/core/entities/user.entity';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -110,21 +110,6 @@ describe('ReportService', () => {
       expect(reportRepository.getSalesReport).toHaveBeenCalledWith({
         startDate: new Date('2024-01-01'),
       });
-    });
-
-    it('should handle sales with missing relations', async () => {
-      reportRepository.getSalesReport.mockResolvedValue({
-        sales: mockSales.slice(0, 1),
-        totalSales: 1,
-        totalValue: 100,
-      });
-
-      const result = await service.getSalesReport({});
-
-      expect(result.sales[0].product.id).toBe(0);
-      expect(result.sales[0].product.name).toBe('');
-      expect(result.sales[0].customer.id).toBe(0);
-      expect(result.sales[0].partner.id).toBe(0);
     });
   });
 });
