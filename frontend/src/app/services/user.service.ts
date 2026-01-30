@@ -21,10 +21,18 @@ export interface UpdateUserDto {
   role?: string;
 }
 
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export const userService = {
   getAll: async (): Promise<User[]> => {
-    const response = await apiClient.get<User[]>("/users");
-    return response.data;
+    const response = await apiClient.get<PaginatedResponse<User>>("/users");
+    return response.data.data;
   },
 
   getById: async (id: string): Promise<User> => {

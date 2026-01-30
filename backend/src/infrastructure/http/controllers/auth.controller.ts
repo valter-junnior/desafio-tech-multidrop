@@ -2,12 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 import { Public } from '../../auth/decorators/public.decorator';
-
-class GenerateTokenDto {
-  userId: string;
-  email: string;
-  role: string;
-}
+import { GenerateTokenRequest } from '../requests/auth/generate-token.request';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -21,7 +16,7 @@ export class AuthController {
     description: 'Endpoint público para gerar tokens JWT fake para desenvolvimento/testes'
   })
   @ApiResponse({ status: 201, description: 'Token gerado com sucesso' })
-  async generateToken(@Body() dto: GenerateTokenDto) {
+  async generateToken(@Body() dto: GenerateTokenRequest) {
     const payload = { sub: dto.userId, email: dto.email, role: dto.role };
     return {
       access_token: this.jwtService.sign(payload),

@@ -34,10 +34,18 @@ export interface CreateSaleDto {
   quantity: number;
 }
 
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export const saleService = {
   getAll: async (): Promise<Sale[]> => {
-    const response = await apiClient.get<Sale[]>("/sales");
-    return response.data;
+    const response = await apiClient.get<PaginatedResponse<Sale>>("/sales");
+    return response.data.data;
   },
 
   getById: async (id: string): Promise<Sale> => {

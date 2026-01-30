@@ -1,1 +1,5 @@
-em components.json mude para ir pasra o shared/compoments e shared/libs alem de mover os que ja existe e atualizar os path
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

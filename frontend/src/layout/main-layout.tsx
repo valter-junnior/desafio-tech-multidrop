@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { useAuthStore } from "../features/auth/hooks/use-auth-store";
 import { Button } from "../shared/components/ui/button";
 import {
@@ -10,11 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
-
-export function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
@@ -118,7 +114,9 @@ export function MainLayout({ children }: MainLayoutProps) {
 
       {/* Main content */}
       <div className="pl-64">
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

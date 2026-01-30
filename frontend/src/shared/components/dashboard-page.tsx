@@ -67,40 +67,6 @@ export function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-
-      <div className="mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Início Rápido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <p className="text-gray-600">
-                Bem-vindo ao sistema Multidrop! Use o menu lateral para navegar
-                entre as funcionalidades:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-600">
-                <li>
-                  <strong>Usuários:</strong> Gerencie usuários (Admin, Parceiros
-                  e Clientes)
-                </li>
-                <li>
-                  <strong>Produtos:</strong> Cadastre e gerencie produtos com
-                  preços e comissões
-                </li>
-                <li>
-                  <strong>Vendas:</strong> Registre vendas e associe parceiros e
-                  clientes
-                </li>
-                <li>
-                  <strong>Relatórios:</strong> Visualize relatórios de vendas e
-                  comissões dos parceiros
-                </li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }

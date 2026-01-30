@@ -21,10 +21,19 @@ export interface UpdateProductDto {
   commission?: number;
 }
 
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export const productService = {
   getAll: async (): Promise<Product[]> => {
-    const response = await apiClient.get<Product[]>("/products");
-    return response.data;
+    const response =
+      await apiClient.get<PaginatedResponse<Product>>("/products");
+    return response.data.data;
   },
 
   getById: async (id: string): Promise<Product> => {
