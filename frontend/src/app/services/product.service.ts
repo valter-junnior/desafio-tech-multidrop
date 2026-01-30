@@ -1,7 +1,7 @@
 import { apiClient } from "./api";
 
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   price: number;
   active: boolean;

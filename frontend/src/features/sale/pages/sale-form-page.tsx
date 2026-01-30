@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -23,9 +24,9 @@ import {
 } from "../../../shared/components/ui/card";
 
 const saleSchema = z.object({
-  productId: z.string().min(1, "Produto é obrigatório"),
-  partnerId: z.string().min(1, "Parceiro é obrigatório"),
-  customerId: z.string().min(1, "Cliente é obrigatório"),
+  productId: z.number().min(1, "Produto é obrigatório"),
+  partnerId: z.number().min(1, "Parceiro é obrigatório"),
+  customerId: z.number().min(1, "Cliente é obrigatório"),
   quantity: z.coerce.number().min(1, "Quantidade deve ser maior que 0"),
 });
 
@@ -38,24 +39,49 @@ export function SaleFormPage() {
   const { data: partners } = useUsers("PARTNER");
   const { data: customers } = useUsers("CUSTOMER");
 
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+    null,
+  );
+  const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(
+    null,
+  );
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
+    null,
+  );
+
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
+    setError,
+    clearErrors,
   } = useForm<SaleFormData>({
     resolver: zodResolver(saleSchema),
     mode: "onChange",
   });
 
-  const selectedProductId = watch("productId");
-  const selectedPartnerId = watch("partnerId");
-  const selectedCustomerId = watch("customerId");
-
   const onSubmit = async (data: SaleFormData) => {
+    // Validar selects manualmente
+    if (!selectedProductId) {
+      setError("productId", { message: "Produto é obrigatório" });
+      return;
+    }
+    if (!selectedPartnerId) {
+      setError("partnerId", { message: "Parceiro é obrigatório" });
+      return;
+    }
+    if (!selectedCustomerId) {
+      setError("customerId", { message: "Cliente é obrigatório" });
+      return;
+    }
+
     try {
-      await createSale.mutateAsync(data);
+      await createSale.mutateAsync({
+        productId: selectedProductId,
+        partnerId: selectedPartnerId,
+        customerId: selectedCustomerId,
+        quantity: data.quantity,
+      });
       navigate("/sales");
     } catch (error) {
       console.error("Erro ao criar venda:", error);
@@ -75,17 +101,18 @@ export function SaleFormPage() {
                 Produto
               </Label>
               <Select
-                value={selectedProductId}
-                onValueChange={(value) =>
-                  setValue("productId", value, { shouldValidate: true })
-                }
+                value={selectedProductId?.toString() || ""}
+                onValueChange={(value) => {
+                  setSelectedProductId(Number(value));
+                  clearErrors("productId");
+                }}
               >
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Selecione um produto" />
                 </SelectTrigger>
                 <SelectContent>
                   {products?.map((product) => (
-                    <SelectItem key={product.id} value={product.id}>
+                    <SelectItem key={product.id} value={product.id.toString()}>
                       {product.name} -{" "}
                       {new Intl.NumberFormat("pt-BR", {
                         style: "currency",
@@ -107,17 +134,18 @@ export function SaleFormPage() {
                 Parceiro
               </Label>
               <Select
-                value={selectedPartnerId}
-                onValueChange={(value) =>
-                  setValue("partnerId", value, { shouldValidate: true })
-                }
+                value={selectedPartnerId?.toString() || ""}
+                onValueChange={(value) => {
+                  setSelectedPartnerId(Number(value));
+                  clearErrors("partnerId");
+                }}
               >
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Selecione um parceiro" />
                 </SelectTrigger>
                 <SelectContent>
                   {partners?.map((partner) => (
-                    <SelectItem key={partner.id} value={partner.id}>
+                    <SelectItem key={partner.id} value={partner.id.toString()}>
                       {partner.name} ({partner.email})
                     </SelectItem>
                   ))}
@@ -135,17 +163,21 @@ export function SaleFormPage() {
                 Cliente
               </Label>
               <Select
-                value={selectedCustomerId}
-                onValueChange={(value) =>
-                  setValue("customerId", value, { shouldValidate: true })
-                }
+                value={selectedCustomerId?.toString() || ""}
+                onValueChange={(value) => {
+                  setSelectedCustomerId(Number(value));
+                  clearErrors("customerId");
+                }}
               >
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Selecione um cliente" />
                 </SelectTrigger>
                 <SelectContent>
                   {customers?.map((customer) => (
-                    <SelectItem key={customer.id} value={customer.id}>
+                    <SelectItem
+                      key={customer.id}
+                      value={customer.id.toString()}
+                    >
                       {customer.name} ({customer.email})
                     </SelectItem>
                   ))}

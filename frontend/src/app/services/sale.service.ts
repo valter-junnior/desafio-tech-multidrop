@@ -1,36 +1,36 @@
 import { apiClient } from "./api";
 
 export interface Sale {
-  id: string;
-  productId: string;
-  partnerId: string;
-  customerId: string;
+  id: number;
+  productId: number;
+  partnerId: number;
+  customerId: number;
   quantity: number;
   totalPrice: number;
   createdAt: string;
   updatedAt: string;
   product?: {
-    id: string;
+    id: number;
     name: string;
     price: number;
     commission: number;
   };
   partner?: {
-    id: string;
+    id: number;
     name: string;
     email: string;
   };
   customer?: {
-    id: string;
+    id: number;
     name: string;
     email: string;
   };
 }
 
 export interface CreateSaleDto {
-  productId: string;
-  partnerId: string;
-  customerId: string;
+  productId: number;
+  partnerId: number;
+  customerId: number;
   quantity: number;
 }
 
