@@ -2,7 +2,7 @@
 
 API REST desenvolvida com NestJS para gerenciamento de marketplace com programa de afiliados.
 
-## 🚀 Stack
+## Stack
 
 - NestJS + TypeScript
 - Prisma ORM + PostgreSQL
@@ -10,17 +10,35 @@ API REST desenvolvida com NestJS para gerenciamento de marketplace com programa 
 - JWT Authentication
 - Jest (Unit Tests)
 
-## ⚡ Início Rápido
+## Decisões técnicas
+
+### Arquitetura
+
+Inicialmente considerei DDD + Clean Architecture, mas optei por uma abordagem mais pragmática mantendo apenas Clean Architecture com as camadas essenciais: Repository, Service, DTO e Controllers. Esta escolha equilibra organização e simplicidade para o escopo do projeto.
+
+### Prisma ORM
+
+Configurado dentro de `infrastructure/database` em vez da raiz do projeto. Esta decisão mantém as dependências técnicas isoladas na camada de infraestrutura, facilitando eventual migração para outro ORM.
+
+### Camadas auxiliares
+
+- **Presenters**: Transformam entidades de domínio em respostas HTTP
+- **Requests**: Validam e tipam dados de entrada via class-validator
+- **Mappers**: Convertem entre camadas (Prisma ↔ Domain entities)
+
+Estas camadas desacoplam o domínio dos detalhes de comunicação externa, permitindo que mudanças na API não afetem a lógica de negócio.
+
+## Início Rápido
 
 ```bash
 docker compose up -d --build
 ```
 
 **URLs:**
-- 🌐 API: http://localhost:3000
-- 📚 Swagger: http://localhost:3000/api/docs
+- API: http://localhost:3000
+- Swagger: http://localhost:3000/api/docs
 
-## 🔐 Autenticação
+## Autenticação
 
 A API utiliza autenticação JWT. Para acessar endpoints protegidos:
 
@@ -50,31 +68,21 @@ A API utiliza autenticação JWT. Para acessar endpoints protegidos:
 JWT_SECRET=fake-jwt-secret-key
 ```
 
-## 🧪 Testes
+## Testes
 
 ### Executar Testes Unitários
 ```bash
 npm test
 ```
 
-### Cobertura de Testes
-```bash
-npm run test:cov
-```
-
-### Testes Individuais
-```bash
-npm test -- partner.service.spec.ts
-```
-
 **Testes implementados:**
-- ✅ Partner Service (cálculo de comissões)
-- ✅ Product Service (CRUD de produtos)
-- ✅ Sale Service (validações de venda)
-- ✅ User Service (gestão de usuários)
-- ✅ Report Service (geração de relatórios)
+- Partner Service (cálculo de comissões)
+- Product Service (CRUD de produtos)
+- Sale Service (validações de venda)
+- User Service (gestão de usuários)
+- Report Service (geração de relatórios)
 
-## 📚 Endpoints Principais
+## Endpoints Principais
 
 ### Usuários
 - `POST /users` - Criar usuário
@@ -99,7 +107,7 @@ npm test -- partner.service.spec.ts
 
 🔒 = Requer autenticação JWT
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ```
 src/
@@ -117,7 +125,7 @@ src/
 └── main.ts            # Entry point
 ```
 
-## 🗄️ Banco de Dados
+## Banco de Dados
 
 ### Migrations
 ```bash
@@ -128,7 +136,7 @@ npm run prisma:migrate
 ```bash
 npm run prisma:seed
 ```
-## 📝 Variáveis de Ambiente
+## Variáveis de Ambiente
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
@@ -136,6 +144,6 @@ JWT_SECRET="fake-jwt-secret-key"
 PORT=3000
 ```
 
-## 📖 Documentação da API
+## Documentação da API
 
 Acesse o Swagger em: http://localhost:3000/api/docs
