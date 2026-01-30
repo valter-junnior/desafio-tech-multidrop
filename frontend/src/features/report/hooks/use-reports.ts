@@ -8,13 +8,6 @@ export function useSalesReport() {
   });
 }
 
-export function useCommissionsReport() {
-  return useQuery({
-    queryKey: ["reports", "commissions"],
-    queryFn: reportService.getCommissions,
-  });
-}
-
 export function usePartnerCommissions(partnerId: number) {
   return useQuery({
     queryKey: ["reports", "partner-commissions", partnerId],

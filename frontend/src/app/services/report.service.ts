@@ -43,13 +43,6 @@ export const reportService = {
     return response.data;
   },
 
-  getCommissions: async (): Promise<CommissionReport[]> => {
-    const response = await apiClient.get<CommissionReport[]>(
-      "/reports/commissions",
-    );
-    return response.data;
-  },
-
   getPartnerCommissions: async (
     partnerId: number,
   ): Promise<CommissionReport> => {
