@@ -1,9 +1,10 @@
-import { PrismaClient } from 'generated/prisma/client';
+
 import { seedUsers } from './seeders/user.seeder';
 import { seedProducts } from './seeders/product.seeder';
 import { seedSales } from './seeders/sale.seeder';
+import { PrismaService } from 'src/database/prisma.service';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaService();
 
 // Pegar argumentos da linha de comando
 const args = process.argv.slice(2);
