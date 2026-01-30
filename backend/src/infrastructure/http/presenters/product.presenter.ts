@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProductEntity } from '../entities/product.entity';
+import { ProductEntity } from '../../../core/entities/product.entity';
 
-export class ProductResponseDto {
+export class ProductPresenter {
   @ApiProperty({ description: 'ID do produto', example: 1 })
   id: number;
 
@@ -17,7 +17,7 @@ export class ProductResponseDto {
   @ApiProperty({ description: 'Data de criação', example: '2024-01-15T10:30:00.000Z' })
   createdAt: Date;
 
-  constructor(partial: Partial<ProductResponseDto> | ProductEntity) {
+  constructor(partial: Partial<ProductPresenter> | ProductEntity) {
     if (partial instanceof ProductEntity) {
       Object.assign(this, partial.toObject());
     } else {

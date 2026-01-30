@@ -3,7 +3,7 @@ import {
   SalePersistenceWithRelations,
   CreateSalePersistence,
 } from '../infrastructure/types/sale-persistence.type';
-import { ProductMapper } from '../../products/mappers/product.mapper';
+import { ProductMapper } from '../../../infrastructure/database/prisma/models/product.mapper';
 import { UserMapper } from '../../users/mappers/user.mapper';
 
 /**

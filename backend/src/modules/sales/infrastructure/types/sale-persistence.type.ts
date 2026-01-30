@@ -1,4 +1,4 @@
-import { ProductPersistence } from '../../../products/infrastructure/types/product-persistence.type';
+import { ProductPersistence } from '../../../../infrastructure/database/prisma/models/product-persistence.type';
 import { UserPersistence } from '../../../users/infrastructure/types/user-persistence.type';
 
 /**

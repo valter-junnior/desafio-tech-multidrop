@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infrastructure/database/prisma/prisma.service';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { ProductEntity } from '../entities/product.entity';
-import { ProductMapper } from '../mappers/product.mapper';
-import { IProductRepository } from '../../../core/repositories/product.repository';
-import { Product } from 'src/generated/prisma/client';
-import { ProductPersistence } from './types/product-persistence.type';
+import { PrismaService } from '../prisma.service';
+import { ProductEntity } from '../../../../core/entities/product.entity';
+import { IProductRepository } from '../../../../core/repositories/product.repository';
+import { ProductMapper } from '../models/product.mapper';
+import { CreateProductDto } from 'src/application/dtos/create-product.dto';
+import { ProductPersistence } from '../models/product-persistence.type';
+import { Product } from '../prisma';
 
-/**
- * Implementação do repositório de produtos usando Prisma
- * Camada de infraestrutura - Implementa a interface da camada de domínio
- * Segue o princípio de Inversão de Dependência (DIP)
- */
 @Injectable()
 export class ProductRepositoryPrisma implements IProductRepository {
   constructor(private prisma: PrismaService) {}
@@ -49,10 +44,6 @@ export class ProductRepositoryPrisma implements IProductRepository {
     return this.prisma.product.count();
   }
 
-  /**
-   * Converte tipos do Prisma para tipos de persistência intermediários
-   * Mantém o Prisma isolado nesta camada de infraestrutura
-   */
   private mapPrismaToPersistence(prismaProduct: Product): ProductPersistence {
     return {
       id: prismaProduct.id,

@@ -1,4 +1,5 @@
-import { PrismaClient, Sale } from 'src/generated/prisma/client';
+import { Sale } from "../prisma";
+import { PrismaService } from "../prisma.service";
 
 interface SaleSeederData {
   products: Array<{ id: number; price: number }>;
@@ -6,7 +7,7 @@ interface SaleSeederData {
   partners: Array<{ id: number }>;
 }
 
-export async function seedSales(prisma: PrismaClient, data: SaleSeederData) {
+export async function seedSales(prisma: PrismaService, data: SaleSeederData) {
   console.log('🌱 Seeding sales...');
 
   const { products, customers, partners } = data;

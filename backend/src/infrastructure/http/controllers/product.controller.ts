@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Query, Param, ParseIntPipe, ValidationPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { ProductService } from './product.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { ProductResponseDto } from './dto/product-response.dto';
+import { CreateProductRequest } from '../requests/create-product.request';
+import { ProductPresenter } from '../presenters/product.presenter';
+import { ProductService } from 'src/application/services/product.service';
 
 @ApiTags('products')
 @Controller('products')
@@ -11,13 +11,14 @@ export class ProductController {
 
   @Post()
   @ApiOperation({ summary: 'Criar novo produto' })
-  @ApiResponse({ status: 201, description: 'Produto criado com sucesso', type: ProductResponseDto })
+  @ApiResponse({ status: 201, description: 'Produto criado com sucesso', type: ProductPresenter })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   async create(
     @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-    createProductDto: CreateProductDto,
-  ): Promise<ProductResponseDto> {
-    return this.productService.create(createProductDto);
+    createProductRequest: CreateProductRequest,
+  ): Promise<ProductPresenter> {
+    const product = await this.productService.create(createProductRequest);
+    return new ProductPresenter(product);
   }
 
   @Get()
@@ -29,7 +30,7 @@ export class ProductController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ): Promise<{
-    data: ProductResponseDto[];
+    data: ProductPresenter[];
     total: number;
     page: number;
     limit: number;
@@ -37,15 +38,21 @@ export class ProductController {
   }> {
     const pageNumber = page ? parseInt(page, 10) : 1;
     const limitNumber = limit ? parseInt(limit, 10) : 10;
-    return this.productService.findAll(pageNumber, limitNumber);
+    const result = await this.productService.findAll(pageNumber, limitNumber);
+    
+    return {
+      ...result,
+      data: result.data.map((product) => new ProductPresenter(product)),
+    };
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Buscar produto por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do produto' })
-  @ApiResponse({ status: 200, description: 'Produto encontrado', type: ProductResponseDto })
+  @ApiResponse({ status: 200, description: 'Produto encontrado', type: ProductPresenter })
   @ApiResponse({ status: 404, description: 'Produto não encontrado' })
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ProductResponseDto> {
-    return this.productService.findById(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<ProductPresenter> {
+    const product = await this.productService.findById(id);
+    return new ProductPresenter(product);
   }
 }

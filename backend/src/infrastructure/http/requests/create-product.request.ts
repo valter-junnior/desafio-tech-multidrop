@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsNumber, IsBoolean, IsOptional, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateProductDto {
+export class CreateProductRequest {
   @ApiProperty({ description: 'Nome do produto', example: 'Notebook Dell' })
   @IsString()
   @IsNotEmpty({ message: 'Nome é obrigatório' })

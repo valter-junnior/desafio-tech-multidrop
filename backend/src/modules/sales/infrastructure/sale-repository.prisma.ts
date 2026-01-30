@@ -4,9 +4,9 @@ import { CreateSaleDto } from '../dto/create-sale.dto';
 import { SaleEntity } from '../entities/sale.entity';
 import { SaleMapper } from '../mappers/sale.mapper';
 import { ISaleRepository } from '../domain/interfaces/sale-repository.interface';
-import { Sale, Product, User } from 'src/generated/prisma/client';
+import { Sale, Product, User } from '../../../infrastructure/database/prisma/generated';
 import { SalePersistenceWithRelations } from './types/sale-persistence.type';
-import { ProductPersistence } from '../../products/infrastructure/types/product-persistence.type';
+import { ProductPersistence } from '../../../infrastructure/database/prisma/models/product-persistence.type';
 import { UserPersistence } from '../../users/infrastructure/types/user-persistence.type';
 
 type PrismaSaleWithRelations = Sale & {

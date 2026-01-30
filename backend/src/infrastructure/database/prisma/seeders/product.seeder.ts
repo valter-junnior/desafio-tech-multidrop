@@ -1,6 +1,6 @@
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaService } from "../prisma.service";
 
-export async function seedProducts(prisma: PrismaClient) {
+export async function seedProducts(prisma: PrismaService) {
   console.log('🌱 Seeding products...');
 
   const product1 = await prisma.product.create({

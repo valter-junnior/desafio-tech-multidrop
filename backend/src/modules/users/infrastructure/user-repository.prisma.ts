@@ -4,7 +4,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../entities/user.entity';
 import { UserMapper } from '../mappers/user.mapper';
 import { IUserRepository } from '../domain/interfaces/user-repository.interface';
-import { User } from 'src/generated/prisma/client';
+import { User } from '../../../infrastructure/database/prisma/generated';
 import { UserPersistence } from './types/user-persistence.type';
 
 /**

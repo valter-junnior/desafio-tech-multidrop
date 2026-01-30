@@ -1,6 +1,7 @@
-import { PrismaClient, UserRole } from 'src/generated/prisma/client';
+import { UserRole } from "../prisma";
+import { PrismaService } from "../prisma.service";
 
-export async function seedUsers(prisma: PrismaClient) {
+export async function seedUsers(prisma: PrismaService) {
   console.log('🌱 Seeding users...');
 
   const admin = await prisma.user.create({

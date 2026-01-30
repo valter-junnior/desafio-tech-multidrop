@@ -1,5 +1,5 @@
-import type { ProductEntity } from '../../modules/products/entities/product.entity';
-import type { CreateProductDto } from '../../modules/products/dto/create-product.dto';
+import type { ProductEntity } from '../entities/product.entity';
+import type { CreateProductDto } from '../../application/dtos/create-product.dto';
 
 export interface IProductRepository {
   create(data: CreateProductDto): Promise<ProductEntity>;

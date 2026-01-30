@@ -1,13 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './infrastructure/http/controllers/app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './infrastructure/database/database.module';
-import { UserModule } from './modules/users/user.module';
-import { ProductModule } from './modules/products/product.module';
-import { SaleModule } from './modules/sales/sale.module';
-import { PartnerModule } from './modules/partners/partner.module';
-import { ReportModule } from './modules/reports/report.module';
+import { HttpModule } from './infrastructure/http/http.module';
 
 @Module({
   imports: [
@@ -15,13 +9,7 @@ import { ReportModule } from './modules/reports/report.module';
       isGlobal: true,
     }),
     DatabaseModule,
-    UserModule,
-    ProductModule,
-    SaleModule,
-    PartnerModule,
-    ReportModule,
+    HttpModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

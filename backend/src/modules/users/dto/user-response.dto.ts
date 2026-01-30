@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from '../../../infrastructure/database/prisma/generated';
 import { Exclude } from 'class-transformer';
 import { UserEntity } from '../entities/user.entity';
 

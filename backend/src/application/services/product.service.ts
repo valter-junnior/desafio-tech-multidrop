@@ -1,14 +1,9 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { ProductResponseDto } from './dto/product-response.dto';
+import { CreateProductDto } from '../dtos/create-product.dto';
 import type { IProductRepository } from '../../core/repositories/product.repository';
 import { PRODUCT_REPOSITORY } from '../../core/repositories/product.repository';
+import { ProductEntity } from '../../core/entities/product.entity';
 
-/**
- * Service de produtos - Camada de aplicação
- * Orquestra as operações usando a interface do repositório
- * Não depende de implementações concretas (DIP)
- */
 @Injectable()
 export class ProductService {
   constructor(
@@ -16,13 +11,12 @@ export class ProductService {
     private readonly productRepository: IProductRepository,
   ) {}
 
-  async create(createProductDto: CreateProductDto): Promise<ProductResponseDto> {
-    const product = await this.productRepository.create(createProductDto);
-    return new ProductResponseDto(product);
+  async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
+    return await this.productRepository.create(createProductDto);
   }
 
   async findAll(page: number = 1, limit: number = 10): Promise<{
-    data: ProductResponseDto[];
+    data: ProductEntity[];
     total: number;
     page: number;
     limit: number;
@@ -35,7 +29,7 @@ export class ProductService {
     ]);
 
     return {
-      data: products.map((product) => new ProductResponseDto(product)),
+      data: products,
       total,
       page,
       limit,
@@ -43,11 +37,11 @@ export class ProductService {
     };
   }
 
-  async findById(id: number): Promise<ProductResponseDto> {
+  async findById(id: number): Promise<ProductEntity> {
     const product = await this.productRepository.findById(id);
     if (!product) {
       throw new NotFoundException(`Produto com ID ${id} não encontrado`);
     }
-    return new ProductResponseDto(product);
+    return product;
   }
 }

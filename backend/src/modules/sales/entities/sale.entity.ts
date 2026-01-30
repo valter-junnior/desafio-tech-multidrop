@@ -1,4 +1,4 @@
-import { ProductEntity } from '../../products/entities/product.entity';
+import { ProductEntity } from '../../../core/entities/product.entity';
 import { UserEntity } from '../../users/entities/user.entity';
 
 export class SaleEntity {
