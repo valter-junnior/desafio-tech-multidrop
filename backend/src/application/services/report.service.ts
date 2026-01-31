@@ -1,7 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { IReportRepository } from '../../core/repositories/report.repository';
 import { REPORT_REPOSITORY } from '../../core/repositories/report.repository';
-import { SalesReportResponseDto, SalesReportQuery } from '../dtos/sale/sales-report-response.dto';
+import {
+  SalesReportResponseDto,
+  SalesReportQuery,
+} from '../dtos/sale/sales-report-response.dto';
 
 @Injectable()
 export class ReportService {
@@ -10,7 +13,9 @@ export class ReportService {
     private readonly reportRepository: IReportRepository,
   ) {}
 
-  async getSalesReport(query: SalesReportQuery): Promise<SalesReportResponseDto> {
+  async getSalesReport(
+    query: SalesReportQuery,
+  ): Promise<SalesReportResponseDto> {
     const filters: any = {};
 
     if (query.startDate) {
@@ -25,7 +30,16 @@ export class ReportService {
       filters.partnerId = query.partnerId;
     }
 
-    const { sales, totalSales, totalValue } = await this.reportRepository.getSalesReport(filters);
+    if (query.page) {
+      filters.page = query.page;
+    }
+
+    if (query.limit) {
+      filters.limit = query.limit;
+    }
+
+    const { sales, totalSales, totalValue, totalPages, currentPage } =
+      await this.reportRepository.getSalesReport(filters);
 
     const salesData = sales.map((sale) => ({
       id: sale.id,
@@ -49,6 +63,8 @@ export class ReportService {
     return new SalesReportResponseDto({
       totalSales,
       totalValue,
+      totalPages,
+      currentPage,
       filters: {
         startDate: query.startDate,
         endDate: query.endDate,

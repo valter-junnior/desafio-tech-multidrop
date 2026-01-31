@@ -4,12 +4,16 @@ export interface SalesReportFilters {
   startDate?: Date;
   endDate?: Date;
   partnerId?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface SalesReportResult {
   sales: SaleEntity[];
   totalSales: number;
   totalValue: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface IReportRepository {

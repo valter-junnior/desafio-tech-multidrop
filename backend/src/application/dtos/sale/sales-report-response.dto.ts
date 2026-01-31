@@ -2,11 +2,15 @@ export interface SalesReportQuery {
   startDate?: string;
   endDate?: string;
   partnerId?: number;
+  page?: number;
+  limit?: number;
 }
 
 export class SalesReportResponseDto {
   totalSales: number;
   totalValue: number;
+  totalPages: number;
+  currentPage: number;
   filters: {
     startDate?: string;
     endDate?: string;

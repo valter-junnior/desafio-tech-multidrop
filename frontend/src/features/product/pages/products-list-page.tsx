@@ -100,6 +100,7 @@ export function ProductsListPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>ID</TableHead>
                 <TableHead>Nome</TableHead>
                 <TableHead>Preço</TableHead>
                 <TableHead>Status</TableHead>
@@ -110,6 +111,7 @@ export function ProductsListPage() {
             <TableBody>
               {products?.map((product) => (
                 <TableRow key={product.id}>
+                  <TableCell>{product.id}</TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>
                     {currencyFormatter.format(product.price)}

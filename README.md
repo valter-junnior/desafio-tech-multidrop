@@ -57,6 +57,27 @@ Optei por uma arquitetura baseada em features separada por domínios (`auth`, `u
 
 Escolhi o Vite pela inicialização instantânea e HMR extremamente rápido, proporcionando melhor experiência de desenvolvimento.
 
+### Melhorias 
+
+Para ambientes de produção e escalabilidade, as seguintes melhorias seriam implementadas:
+
+#### Arquitetura
+- **Domain-Driven Design (DDD)**: Implementar DDD completo para melhor separação de bounded contexts e agregados complexos
+- **Event Sourcing**: Para auditoria completa de operações críticas (vendas, comissões)
+- **CQRS**: Separação de comandos e queries para otimizar leitura/escrita
+
+#### Observabilidade
+- **Logging Distribuído**: Sistema de notificações em tempo real via Discord/Slack para erros críticos
+- **APM**: Application Performance Monitoring com Datadog ou New Relic
+
+#### Performance & Resiliência
+- **Cache**: Redis para cache de produtos, comissões e relatórios frequentes
+- **Rate Limiting**: Proteção contra abuso de API
+
+#### Banco de Dados
+- **UUIDs**: Migração de IDs sequenciais para UUID v7 (ordenáveis por timestamp)
+- **Soft Delete**: Implementação de exclusão lógica para auditoria
+
 ## Início Rápido
 
 ### Backend

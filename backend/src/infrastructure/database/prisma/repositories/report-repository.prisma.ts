@@ -29,7 +29,9 @@ export class ReportRepositoryPrisma implements IReportRepository {
     if (filters.partnerId) {
       where.partnerId = filters.partnerId;
     }
-
+    const page = filters.page || 1;
+    const limit = filters.limit || 10;
+    const skip = (page - 1) * limit;
     const [salesData, totalSales, totalValueAgg] = await Promise.all([
       this.prisma.sale.findMany({
         where,
@@ -41,6 +43,8 @@ export class ReportRepositoryPrisma implements IReportRepository {
         orderBy: {
           createdAt: 'desc',
         },
+        skip,
+        take: limit,
       }),
       this.prisma.sale.count({ where }),
       this.prisma.sale.aggregate({
@@ -55,10 +59,14 @@ export class ReportRepositoryPrisma implements IReportRepository {
       SaleMapper.toDomain(saleData as any),
     );
 
+    const totalPages = Math.ceil(totalSales / limit);
+
     return {
       sales,
       totalSales,
       totalValue: totalValueAgg._sum.value || 0,
+      totalPages,
+      currentPage: page,
     };
   }
 }

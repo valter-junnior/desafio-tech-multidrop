@@ -3,6 +3,8 @@ import { apiClient } from "./api";
 export interface SalesReportResponse {
   totalSales: number;
   totalValue: number;
+  totalPages: number;
+  currentPage: number;
   filters: {
     startDate?: string;
     endDate?: string;
@@ -38,8 +40,19 @@ export interface CommissionReport {
 }
 
 export const reportService = {
-  getSalesReport: async (): Promise<SalesReportResponse> => {
-    const response = await apiClient.get<SalesReportResponse>("/reports/sales");
+  getSalesReport: async (params?: {
+    startDate?: string;
+    endDate?: string;
+    partnerId?: number;
+    page?: number;
+    limit?: number;
+  }): Promise<SalesReportResponse> => {
+    const response = await apiClient.get<SalesReportResponse>(
+      "/reports/sales",
+      {
+        params,
+      },
+    );
     return response.data;
   },
 

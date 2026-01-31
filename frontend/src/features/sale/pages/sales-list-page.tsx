@@ -99,6 +99,7 @@ export function SalesListPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>ID</TableHead>
                 <TableHead>Produto</TableHead>
                 <TableHead>Parceiro</TableHead>
                 <TableHead>Cliente</TableHead>
@@ -111,6 +112,7 @@ export function SalesListPage() {
             <TableBody>
               {sales?.map((sale) => (
                 <TableRow key={sale.id}>
+                  <TableCell>{sale.id}</TableCell>
                   <TableCell className="font-medium">
                     {sale.product?.name || "N/A"}
                   </TableCell>
