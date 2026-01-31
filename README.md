@@ -8,6 +8,7 @@ Sistema completo de marketplace com programa de afiliados, desenvolvido com Nest
 - Prisma ORM + PostgreSQL
 - Docker & Docker Compose
 - JWT Authentication
+- Winston Logger (rotação diária)
 - Jest (Unit Tests)
 
 ## Stack Frontend
@@ -164,7 +165,8 @@ src/
 ├── infrastructure/    # Implementações técnicas
 │   ├── auth/          # JWT Strategy, Guards, Decorators
 │   ├── database/      # Prisma, Migrations, Seeders
-│   └── http/          # Controllers, Presenters, Requests
+│   ├── logger/        # Winston Logger (rotação diária)
+│   └── http/          # Controllers, Presenters, Requests, Filters
 └── main.ts            # Entry point
 ```
 
@@ -210,6 +212,7 @@ npm run prisma:seed
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 JWT_SECRET="fake-jwt-secret-key"
 PORT=3000
+LOG_LEVEL=info  # error, warn, info, debug
 ```
 
 ### Frontend
