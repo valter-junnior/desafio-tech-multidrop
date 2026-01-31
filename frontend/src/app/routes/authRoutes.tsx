@@ -3,12 +3,6 @@ import { type RouteObject, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./protected-route";
 import { MainLayout } from "../../layout/main-layout";
 
-const DashboardPage = lazy(() =>
-  import("../../shared/components/dashboard-page").then((m) => ({
-    default: m.DashboardPage,
-  })),
-);
-
 const UsersListPage = lazy(() =>
   import("../../features/user/pages/users-list-page").then((m) => ({
     default: m.UsersListPage,
