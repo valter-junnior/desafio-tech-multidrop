@@ -1,8 +1,8 @@
-# Sistema de Marketplace/Afiliados - Backend
+# Sistema de Marketplace/Afiliados
 
-API REST desenvolvida com NestJS para gerenciamento de marketplace com programa de afiliados.
+Sistema completo de marketplace com programa de afiliados, desenvolvido com NestJS (Backend) e React (Frontend).
 
-## Stack
+## Stack Backend
 
 - NestJS + TypeScript
 - Prisma ORM + PostgreSQL
@@ -10,17 +10,29 @@ API REST desenvolvida com NestJS para gerenciamento de marketplace com programa 
 - JWT Authentication
 - Jest (Unit Tests)
 
+## Stack Frontend
+
+- React 19 + TypeScript
+- Vite
+- TailwindCSS + shadcn/ui
+- React Router Dom
+- TanStack Query (React Query)
+- Zustand (State Management)
+- Axios + Zod
+
 ## Decisões técnicas
 
-### Arquitetura
+### Backend
+
+#### Arquitetura
 
 Inicialmente considerei DDD + Clean Architecture, mas optei por uma abordagem mais pragmática mantendo apenas Clean Architecture com as camadas essenciais: Repository, Service, DTO e Controllers. Esta escolha equilibra organização e simplicidade para o escopo do projeto.
 
-### Prisma ORM
+#### Prisma ORM
 
 Configurado dentro de `infrastructure/database` em vez da raiz do projeto. Esta decisão mantém as dependências técnicas isoladas na camada de infraestrutura, facilitando eventual migração para outro ORM.
 
-### Camadas auxiliares
+#### Camadas auxiliares
 
 - **Presenters**: Transformam entidades de domínio em respostas HTTP
 - **Requests**: Validam e tipam dados de entrada via class-validator
@@ -28,7 +40,25 @@ Configurado dentro de `infrastructure/database` em vez da raiz do projeto. Esta 
 
 Estas camadas desacoplam o domínio dos detalhes de comunicação externa, permitindo que mudanças na API não afetem a lógica de negócio.
 
+### Frontend
+
+#### Arquitetura baseada em Features
+
+Optei por uma arquitetura baseada em features separada por domínios (`auth`, `user`, `product`, `sale`, `report`). Esta organização permite melhor separação entre componentes compartilhados (no `shared/`) e componentes específicos de cada domínio, facilitando manutenção e escalabilidade.
+
+#### Stack de gerenciamento de estado
+
+- **TanStack Query (React Query)**: Gerenciamento de estado assíncrono e cache de requisições HTTP, reduzindo chamadas desnecessárias à API
+- **Zustand**: State management global leve e simples para dados síncronos (auth, UI state)
+- **React Hook Form + Zod**: Validação de formulários com tipagem forte e performance otimizada
+
+#### Vite como Build Tool
+
+Escolhi o Vite pela inicialização instantânea e HMR extremamente rápido, proporcionando melhor experiência de desenvolvimento.
+
 ## Início Rápido
+
+### Backend
 
 ```bash
 docker compose up -d --build
@@ -37,6 +67,17 @@ docker compose up -d --build
 **URLs:**
 - API: http://localhost:3000
 - Swagger: http://localhost:3000/api/docs
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+**URL:**
+- App: http://localhost:5173
 
 ## Autenticação
 
@@ -109,6 +150,8 @@ npm test
 
 ## Arquitetura
 
+### Backend
+
 ```
 src/
 ├── application/        # Casos de uso e DTOs
@@ -125,6 +168,29 @@ src/
 └── main.ts            # Entry point
 ```
 
+### Frontend
+
+```
+src/
+├── app/
+│   ├── config/         # Configurações (constants, query-client)
+│   ├── routes/         # Configuração de rotas (ProtectedRoute)
+│   └── services/       # Services da API (auth, user, product, sale, report)
+├── features/           # Funcionalidades por domínio
+│   ├── auth/           # Autenticação (hooks, pages)
+│   ├── user/           # Usuários (components, hooks, pages)
+│   ├── product/        # Produtos (components, hooks, pages)
+│   ├── sale/           # Vendas (components, hooks, pages)
+│   └── report/         # Relatórios (components, hooks, pages)
+├── layout/             # Layouts principais (MainLayout)
+├── shared/             # Recursos compartilhados
+│   ├── components/     # Componentes reutilizáveis
+│   ├── hooks/          # Hooks customizados
+│   └── libs/           # Bibliotecas utilitárias
+├── types/              # Tipagens TypeScript (dto, entities)
+└── main.tsx            # Entry point
+```
+
 ## Banco de Dados
 
 ### Migrations
@@ -138,10 +204,18 @@ npm run prisma:seed
 ```
 ## Variáveis de Ambiente
 
+### Backend
+
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 JWT_SECRET="fake-jwt-secret-key"
 PORT=3000
+```
+
+### Frontend
+
+```env
+VITE_API_URL="http://localhost:3000"
 ```
 
 ## Documentação da API
