@@ -1,4 +1,9 @@
-import { Injectable, ConflictException, NotFoundException, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+  Inject,
+} from '@nestjs/common';
 import { CreateUserDto } from '../dtos/user/create-user.dto';
 import type { IUserRepository } from '../../core/repositories/user.repository';
 import { USER_REPOSITORY } from '../../core/repositories/user.repository';
@@ -13,15 +18,22 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const existingUser = await this.userRepository.findByEmail(createUserDto.email);
+    const existingUser = await this.userRepository.findByEmail(
+      createUserDto.email,
+    );
     if (existingUser) {
       throw new ConflictException('Email já cadastrado');
     }
 
-    return await this.userRepository.create(createUserDto);
+    const user = await this.userRepository.create(createUserDto);
+    return user;
   }
 
-  async findAll(page: number = 1, limit: number = 10, role?: UserRole): Promise<{
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+    role?: UserRole,
+  ): Promise<{
     data: UserEntity[];
     total: number;
     page: number;

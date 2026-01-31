@@ -11,6 +11,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Application logs
+/storage/logs/*.log
+/storage/logs/*.gz
+
 # OS
 .DS_Store
 
