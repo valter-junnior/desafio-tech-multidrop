@@ -1,84 +1,71 @@
 # Sistema de Marketplace/Afiliados
 
-Sistema completo de marketplace com programa de afiliados, desenvolvido com NestJS (Backend) e React (Frontend).
+Sistema de marketplace com programa de afiliados usando NestJS e React.
 
-## Stack Backend
+## Stack
 
+**Backend:**
 - NestJS + TypeScript
 - Prisma ORM + PostgreSQL
 - Docker & Docker Compose
 - JWT Authentication
-- Winston Logger (rotação diária)
-- Jest (Unit Tests)
+- Winston Logger
+- Jest
 
-## Stack Frontend
-
-- React 19 + TypeScript
-- Vite
+**Frontend:**
+- React 19 + TypeScript + Vite
 - TailwindCSS + shadcn/ui
 - React Router Dom
-- TanStack Query (React Query)
-- Zustand (State Management)
+- TanStack Query
+- Zustand
 - Axios + Zod
 
-## Decisões técnicas
+## Decisões Técnicas
 
 ### Backend
 
-#### Arquitetura
+**Arquitetura:** Clean Architecture com Repository, Service, DTO e Controllers.
 
-Inicialmente considerei DDD + Clean Architecture, mas optei por uma abordagem mais pragmática mantendo apenas Clean Architecture com as camadas essenciais: Repository, Service, DTO e Controllers. Esta escolha equilibra organização e simplicidade para o escopo do projeto.
+**Prisma:** Configurado em `infrastructure/database` para isolar dependências técnicas da lógica de negócio.
 
-#### Prisma ORM
-
-Configurado dentro de `infrastructure/database` em vez da raiz do projeto. Esta decisão mantém as dependências técnicas isoladas na camada de infraestrutura, facilitando eventual migração para outro ORM.
-
-#### Camadas auxiliares
-
-- **Presenters**: Transformam entidades de domínio em respostas HTTP
-- **Requests**: Validam e tipam dados de entrada via class-validator
-- **Mappers**: Convertem entre camadas (Prisma ↔ Domain entities)
-
-Estas camadas desacoplam o domínio dos detalhes de comunicação externa, permitindo que mudanças na API não afetem a lógica de negócio.
+**Camadas auxiliares:**
+- **Presenters**: Transformam entidades em respostas HTTP
+- **Requests**: Validam entrada com class-validator
+- **Mappers**: Convertem entre Prisma e entidades de domínio
 
 ### Frontend
 
-#### Arquitetura baseada em Features
+**Arquitetura por features:** Cada domínio (`auth`, `user`, `product`, `sale`, `report`) tem seus próprios componentes, hooks e páginas. Componentes compartilhados ficam em `shared/`.
 
-Optei por uma arquitetura baseada em features separada por domínios (`auth`, `user`, `product`, `sale`, `report`). Esta organização permite melhor separação entre componentes compartilhados (no `shared/`) e componentes específicos de cada domínio, facilitando manutenção e escalabilidade.
+**Estado:**
+- **TanStack Query**: Cache e sincronização com API
+- **Zustand**: Estado global simples (auth, UI)
+- **React Hook Form + Zod**: Validação de formulários
 
-#### Stack de gerenciamento de estado
+**Vite:** Build tool rápido com HMR instantâneo.
 
-- **TanStack Query (React Query)**: Gerenciamento de estado assíncrono e cache de requisições HTTP, reduzindo chamadas desnecessárias à API
-- **Zustand**: State management global leve e simples para dados síncronos (auth, UI state)
-- **React Hook Form + Zod**: Validação de formulários com tipagem forte e performance otimizada
+### Melhorias Futuras
 
-#### Vite como Build Tool
+Para produção, seria interessante adicionar:
 
-Escolhi o Vite pela inicialização instantânea e HMR extremamente rápido, proporcionando melhor experiência de desenvolvimento.
+**Arquitetura:**
+- DDD completo para bounded contexts
+- Event Sourcing para auditoria
+- CQRS para otimizar leitura/escrita
 
-### Melhorias 
+**Observabilidade:**
+- Notificações de erros (Discord/Slack)
+- APM (Datadog, New Relic)
 
-Para ambientes de produção e escalabilidade, as seguintes melhorias seriam implementadas:
+**Performance:**
+- Redis para cache
+- Rate limiting
 
-#### Arquitetura
-- **Domain-Driven Design (DDD)**: Implementar DDD completo para melhor separação de bounded contexts e agregados complexos
-- **Event Sourcing**: Para auditoria completa de operações críticas (vendas, comissões)
-- **CQRS**: Separação de comandos e queries para otimizar leitura/escrita
+**Database:**
+- UUID v7 em vez de IDs sequenciais
+- Soft delete para auditoria
 
-#### Observabilidade
-- **Logging Distribuído**: Sistema de notificações em tempo real via Discord/Slack para erros críticos
-- **APM**: Application Performance Monitoring com Datadog ou New Relic
-
-#### Performance & Resiliência
-- **Cache**: Redis para cache de produtos, comissões e relatórios frequentes
-- **Rate Limiting**: Proteção contra abuso de API
-
-#### Banco de Dados
-- **UUIDs**: Migração de IDs sequenciais para UUID v7 (ordenáveis por timestamp)
-- **Soft Delete**: Implementação de exclusão lógica para auditoria
-
-## Início Rápido
+## Como Usar
 
 ### Backend
 
@@ -86,7 +73,6 @@ Para ambientes de produção e escalabilidade, as seguintes melhorias seriam imp
 docker compose up -d --build
 ```
 
-**URLs:**
 - API: http://localhost:3000
 - Swagger: http://localhost:3000/api/docs
 
@@ -98,77 +84,51 @@ npm install
 npm run dev
 ```
 
-**URL:**
 - App: http://localhost:5173
 
 ## Autenticação
 
-A API utiliza autenticação JWT. Para acessar endpoints protegidos:
+JWT com roles: `ADMIN`, `PARTNER`, `CUSTOMER`
 
-1. **Obter token JWT** (simulado - use qualquer payload válido):
-```bash
-# Exemplo de token JWT fake para testes
-# Configure o header Authorization: Bearer <seu-token>
-```
-
-2. **Endpoints Públicos** (não requerem autenticação):
-   - `GET /` - Health check
-
-3. **Endpoints Protegidos** (requerem JWT):
-   - `POST /users` - Criar usuário
-   - `POST /products` - Criar produto
-   - `POST /sales` - Registrar venda
-   - `GET /partners/:id/commissions` - Comissões (PARTNER, ADMIN)
-   - `GET /reports/sales` - Relatórios (ADMIN)
-
-**Roles disponíveis:**
-- `ADMIN` - Acesso completo
-- `PARTNER` - Acesso a comissões
-- `CUSTOMER` - Cliente do marketplace
-
-**Variável de Ambiente:**
+**Variável:**
 ```env
 JWT_SECRET=fake-jwt-secret-key
 ```
 
+**Endpoints públicos:**
+- `GET /` - Health check
+
+**Endpoints protegidos:**
+- Usuários, Produtos, Vendas - Qualquer autenticado
+- `GET /partners/:id/commissions` - PARTNER, ADMIN
+- `GET /reports/sales` - ADMIN apenas
+
 ## Testes
 
-### Executar Testes Unitários
 ```bash
 npm test
 ```
 
-**Testes implementados:**
-- Partner Service (cálculo de comissões)
-- Product Service (CRUD de produtos)
-- Sale Service (validações de venda)
-- User Service (gestão de usuários)
-- Report Service (geração de relatórios)
+Cobertos: Partner, Product, Sale, User e Report Services.
 
-## Endpoints Principais
+## Endpoints
 
-### Usuários
-- `POST /users` - Criar usuário
-- `GET /users` - Listar usuários (paginado)
-- `GET /users/:id` - Buscar usuário por ID
+Toda rotas são protegida
 
-### Produtos
-- `POST /products` - Criar produto
-- `GET /products` - Listar produtos (paginado)
-- `GET /products/:id` - Buscar produto por ID
+**Usuários:**
+- `POST /users`, `GET /users`, `GET /users/:id`
 
-### Vendas
-- `POST /sales` - Registrar venda
-- `GET /sales` - Listar vendas (paginado)
-- `GET /sales/:id` - Buscar venda por ID
+**Produtos:**
+- `POST /products`, `GET /products`, `GET /products/:id`
 
-### Parceiros
-- `GET /partners/:id/commissions` - Comissões do parceiro 🔒
+**Vendas:**
+- `POST /sales`, `GET /sales`, `GET /sales/:id`
 
-### Relatórios
-- `GET /reports/sales` - Relatório de vendas 🔒
+**Parceiros:**
+- `GET /partners/:id/commissions`
 
-🔒 = Requer autenticação JWT
+**Relatórios:**
+- `GET /reports/sales`
 
 ## Arquitetura
 
@@ -223,25 +183,24 @@ npm run prisma:migrate
 
 ### Seed (popular banco)
 ```bash
+# Migrations
+npm run prisma:migrate
+
+# Seed (popular dados)
 npm run prisma:seed
 ```
+
 ## Variáveis de Ambiente
 
-### Backend
-
+**Backend:**
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 JWT_SECRET="fake-jwt-secret-key"
 PORT=3000
-LOG_LEVEL=info  # error, warn, info, debug
+LOG_LEVEL=info
 ```
 
-### Frontend
-
+**Frontend:**
 ```env
 VITE_API_URL="http://localhost:3000"
 ```
-
-## Documentação da API
-
-Acesse o Swagger em: http://localhost:3000/api/docs
