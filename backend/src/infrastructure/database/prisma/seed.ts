@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { seedUsers } from './seeders/user.seeder';
 import { seedProducts } from './seeders/product.seeder';
 import { seedSales } from './seeders/sale.seeder';
@@ -7,9 +8,12 @@ const prisma = new PrismaService();
 
 // Pegar argumentos da linha de comando
 const args = process.argv.slice(2);
-const nameArg = args.find(arg => arg.startsWith('--name='));
-const seederNames = nameArg 
-  ? nameArg.split('=')[1].split(',').map(s => s.trim())
+const nameArg = args.find((arg) => arg.startsWith('--name='));
+const seederNames = nameArg
+  ? nameArg
+      .split('=')[1]
+      .split(',')
+      .map((s) => s.trim())
   : ['all'];
 
 async function seedAll() {
@@ -25,11 +29,11 @@ async function seedAll() {
   // Executar seeders
   const users = await seedUsers(prisma);
   const products = await seedProducts(prisma);
-  
+
   await seedSales(prisma, {
-    products: products.map(p => ({ id: p.id, price: p.price })),
-    customers: users.customers.map(c => ({ id: c.id })),
-    partners: users.partners.map(p => ({ id: p.id })),
+    products: products.map((p) => ({ id: p.id, price: p.price })),
+    customers: users.customers.map((c) => ({ id: c.id })),
+    partners: users.partners.map((p) => ({ id: p.id })),
   });
 
   console.log('\n🎉 Database seeding completed successfully!');
@@ -61,24 +65,26 @@ async function seedOnlyProducts() {
 async function seedOnlySales() {
   console.log('🌱 Seeding only sales...\n');
   await prisma.sale.deleteMany();
-  
+
   // Buscar dados existentes
   const products = await prisma.product.findMany({
     select: { id: true, price: true },
   });
-  
+
   const customers = await prisma.user.findMany({
     where: { role: 'CUSTOMER' },
     select: { id: true },
   });
-  
+
   const partners = await prisma.user.findMany({
     where: { role: 'PARTNER' },
     select: { id: true },
   });
 
   if (!products.length || !customers.length || !partners.length) {
-    throw new Error('You need products, customers and partners before creating sales. Run: npm run prisma:seed -- --name=users,products');
+    throw new Error(
+      'You need products, customers and partners before creating sales. Run: npm run prisma:seed -- --name=users,products',
+    );
   }
 
   await seedSales(prisma, {
@@ -92,7 +98,7 @@ async function seedOnlySales() {
 
 async function runSeeders(names: string[]) {
   console.log(`🌱 Running seeders: ${names.join(', ')}\n`);
-  
+
   for (const name of names) {
     switch (name.toLowerCase()) {
       case 'users':
@@ -108,7 +114,7 @@ async function runSeeders(names: string[]) {
         console.log(`⚠️  Unknown seeder: ${name}`);
     }
   }
-  
+
   console.log('\n🎉 Seeding completed!');
 }
 

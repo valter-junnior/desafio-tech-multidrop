@@ -1,14 +1,7 @@
 import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { useAuthStore } from "../features/auth/hooks/use-auth-store";
 import { Button } from "../shared/components/ui/button";
-import {
-  LayoutDashboard,
-  Users,
-  Package,
-  ShoppingCart,
-  BarChart3,
-  LogOut,
-} from "lucide-react";
+import { Users, Package, ShoppingCart, BarChart3, LogOut } from "lucide-react";
 
 export function MainLayout() {
   const navigate = useNavigate();

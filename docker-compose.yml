@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: marketplace_db
+    environment:
+      POSTGRES_USER: marketplace
+      POSTGRES_PASSWORD: marketplace123
+      POSTGRES_DB: marketplace
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - marketplace_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketplace"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: marketplace_backend
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: "postgresql://marketplace:marketplace123@postgres:5432/marketplace?schema=public"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/test:/app/test
+      - /app/node_modules
+    networks:
+      - marketplace_network
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run prisma:seed && npm run start:dev"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:3000
+    container_name: marketplace_frontend
+    env_file:
+      - ./frontend/.env
+    ports:
+      - '5173:80'
+    depends_on:
+      - backend
+    networks:
+      - marketplace_network
+
+volumes:
+  postgres_data:
+
+networks:
+  marketplace_network:
+    driver: bridge
